@@ -18,8 +18,8 @@ permissions:
 env:
   CLANG_DOWNLOAD_URL: "https://github.com/Impqxr/aosp_clang_ci/releases/download/13289611/clang-13289611-linux-x86.tar.xz"
   KERNEL_TREE_URL: "https://github.com/jinzhiyikao/n0kernel_xiaomi_sm8250"
-  ANYKERNEL_URL_ALIOTH: "https://github.com/Impqxr/AKalioth"
-  ANYKERNEL_BRANCH_ALIOTH: "main"
+  ANYKERNEL_URL_UMI: "https://github.com/osm0sis/AnyKernel3"
+  ANYKERNEL_BRANCH_UMI: "master"
 
 jobs:
   cache_clang:
@@ -97,7 +97,7 @@ jobs:
           echo "KernelSU Branch: ${{ matrix.config.KERNELSU_SETUP_BRANCH }}"
           echo "KernelSU Name: ${{ matrix.config.KERNELSU_NAME }}"
           echo "KernelSU Patches: ${{ matrix.config.KERNELSU_PATCHES }}"
-          echo "AnyKernel URL (umi): ${{ env.ANYKERNEL_URL_ALIOTH }}/tree/${{ env.ANYKERNEL_BRANCH_ALIOTH }}"
+          echo "AnyKernel URL (umi): ${{ env.ANYKERNEL_URL_UMI }}/tree/${{ env.ANYKERNEL_BRANCH_UMI }}"
           echo "::endgroup::"
 
       - name: Restore Clang Cache
@@ -188,7 +188,8 @@ jobs:
             FINAL_DISPLAY_NAME="${FINAL_DISPLAY_NAME} : SuSFS ${{ steps.build.outputs.SUSFS_VERSION }}"
           fi
 
-          git clone --recursive --depth=1 ${{ env.ANYKERNEL_URL_ALIOTH }} -b ${{ env.ANYKERNEL_BRANCH_ALIOTH }} AnyKernel3
+          git clone --recursive --depth=1 ${{ env.ANYKERNEL_URL_UMI }} -b ${{ env.ANYKERNEL_BRANCH_UMI }} AnyKernel3
+          cp -f "${{ steps.workspace.outputs.kernel_folder }}/.github/anykernel-umi/anykernel.sh" AnyKernel3/
 
           [ -e "Image.gz" ] && cp -f Image.gz AnyKernel3
           [ -e "dtb.img" ] && cp -f dtb.img AnyKernel3/dtb
